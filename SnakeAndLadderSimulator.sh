@@ -1,26 +1,40 @@
 #!/bin/bash -x
 START_POSITION=0
+FINAL_POSITION=100
 position=$START_POSITION
+IS_NO_PLAY=0
+IS_LADDER=1
+IS_SNAKE=2
 rollsTheDie()
 {
 	randomCheckForDie=$((RANDOM%6+1))
 }
 
-randomCheckForOption=$((RANDOM%3))
-if [ $randomCheckForOption -eq 0 ]
-then
-	message="No play- The player stays in the same position"
-	position=$position
+checkPlayerOption()
+{
+	randomCheckForOption=$((RANDOM%3))
 
-elif [ $randomCheckForOption -eq 1 ]
-then
-	message="Ladder- The player moves ahead by the number of position"
-	rollsTheDie
-	position=$(($position+$randomCheckForDie))
+	case $randomCheckForOption in
+	$IS_NO_PLAY)
+		message="No play- The player stays in the same position"
+		position=$position
+	;;
 
-elif [ $randomCheckForOption -eq 2 ]
-then
-	message="Snake- The player moves behind by the number of position"
-	rollsTheDie
-	position=$(($position-$randomCheckForDie))
-fi
+	$IS_LADDER)
+		message="Ladder- The player moves ahead by the number of position"
+		rollsTheDie
+		position=$(($position+$randomCheckForDie))
+	;;
+
+	$IS_SNAKE)
+		message="Snake- The player moves behind by the number of position"
+		rollsTheDie
+		position=$(($position-$randomCheckForDie))
+	;;
+	esac
+}
+while [ $position -le $FINAL_POSITION ]
+do
+	checkPlayerOption
+
+done
