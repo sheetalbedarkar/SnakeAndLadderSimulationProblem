@@ -33,8 +33,26 @@ checkPlayerOption()
 	;;
 	esac
 }
-while [ $position -le $FINAL_POSITION ]
-do
-	checkPlayerOption
 
+checkPosition()
+{
+	if [ $position -eq $FINAL_POSITION ]
+        then
+                message="You are the winner"
+                return $position
+        elif [ $position -gt $FINAL_POSITION ]
+        then
+                position=$(( $position - $randomCheckForDie ))
+
+        elif [ $position -lt $START_POSITION ]
+        then
+                position=$START_POSITION
+        fi
+
+}
+
+while [ $position -lt $FINAL_POSITION ]
+do 
+        checkPlayerOption
+        checkPosition
 done
